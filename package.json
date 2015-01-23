@@ -12,6 +12,7 @@
   "repository": "https://github.com/mattma/gulp-ember-htmlbars.git",
   "author": "Matt Ma <matt@mattmadesign.com>",
   "dependencies": {
+    "ember-cli-htmlbars": "^0.6.0",
     "gulp-util": "^3.0.2",
     "lodash": "^2.4.1",
     "through2": "^0.6.3"
