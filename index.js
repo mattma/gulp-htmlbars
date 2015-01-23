@@ -5,7 +5,7 @@ var clone = require('lodash').clone;
 var defaults = require('lodash').defaults;
 var PluginError = require('gulp-util').PluginError;
 
-var PLUGIN_NAME = 'gulp-plugin-name';
+var PLUGIN_NAME = 'gulp-ember-htmlbars';
 
 function compile(contents, opts){
   // contents: `file.contents` infomration
@@ -21,7 +21,7 @@ function getOptions(opts){
 }
 
 module.exports = function(options){
-  function pluginName(file, enc, cb){
+  function emberHtmlbars(file, enc, cb){
     var opts = getOptions(options);
 
     // Optional: handle the `file` is not existed
@@ -36,15 +36,17 @@ module.exports = function(options){
     }
 
     if(file.isBuffer()){
+      var contents = String(file.contents);
+      console.log('contents: ', contents);
       // Transformation magic happens here.
       // `file.contents` type should always be the same going out as it was when it came in
-      var operation = compile(String(file.contents), opts);
-      file.contents = new Buffer(operation);
+      //var operation = compile(String(file.contents), opts);
+      //file.contents = new Buffer(operation);
     }
 
     this.push(file);
     cb();
   }
 
-  return through.obj(pluginName);
+  return through.obj(emberHtmlbars);
 };
