@@ -1,0 +1,33 @@
+{
+  "name": "gulp-ember-htmlbars",
+  "version": "0.1.0",
+  "description": "compile htmlbars and handlebars for ember application",
+  "keywords": [
+    "gulpplugin",
+    "handlebars",
+    "htmlbars",
+    "ember",
+    "ember-rocks"
+  ],
+  "repository": "https://github.com/mattma/gulp-ember-htmlbars.git",
+  "author": "Matt Ma <matt@mattmadesign.com>",
+  "dependencies": {
+    "gulp-util": "^3.0.2",
+    "lodash": "^2.4.1",
+    "through2": "^0.6.3"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.10"
+  },
+  "scripts": {
+    "test": "gulp jshint && ./node_modules/lab/bin/lab -cv -m 5000 ./test/*.js",
+    "compile": "lodash template=./templates/*.jst exports=node -o template.js -d"
+  },
+  "devDependencies": {
+    "code": "^1.2.1",
+    "gulp": "^3.8.10",
+    "gulp-jshint": "~1.9.0",
+    "lab": "^5.2.0"
+  }
+}
