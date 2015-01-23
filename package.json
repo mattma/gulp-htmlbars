@@ -13,6 +13,7 @@
   "author": "Matt Ma <matt@mattmadesign.com>",
   "dependencies": {
     "ember-cli-htmlbars": "^0.6.0",
+    "ember-template-compiler": "^1.9.0-alpha",
     "gulp-util": "^3.0.2",
     "lodash": "^2.4.1",
     "through2": "^0.6.3"

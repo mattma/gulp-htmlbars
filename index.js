@@ -4,19 +4,22 @@ var through = require('through2');
 var clone = require('lodash').clone;
 var defaults = require('lodash').defaults;
 var PluginError = require('gulp-util').PluginError;
+var HtmlbarsCompiler = require('ember-cli-htmlbars');
+var handlbarsTemplateCompiler = require('ember-template-compiler');
 
 var PLUGIN_NAME = 'gulp-ember-htmlbars';
 
 function compile(contents, opts){
-  // contents: `file.contents` infomration
-  // opts: user passed in options or default options
-  return something_useful;
+  var htmlbarsPrecompile = opts.compiler.precompile;
+  return htmlbarsPrecompile(contents);
 }
 
 function getOptions(opts){
   // opts will always win, override default values
   return defaults(clone(opts) || {}, {
-    deps: null
+    isHTMLBars: true,
+    // provide the compiler that is paired with your Ember version
+    compiler: handlbarsTemplateCompiler
   });
 }
 
@@ -36,12 +39,11 @@ module.exports = function(options){
     }
 
     if(file.isBuffer()){
-      var contents = String(file.contents);
-      console.log('contents: ', contents);
       // Transformation magic happens here.
       // `file.contents` type should always be the same going out as it was when it came in
-      //var operation = compile(String(file.contents), opts);
-      //file.contents = new Buffer(operation);
+      var operation = compile(String(file.contents), opts);
+      console.log('operation: ', operation);
+      // file.contents = new Buffer(operation);
     }
 
     this.push(file);
