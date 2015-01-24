@@ -17,9 +17,10 @@ function compile(contents, opts){
 function getOptions(opts){
   // opts will always win, override default values
   return defaults(clone(opts) || {}, {
-    isHTMLBars: true,
+    isHTMLBars: false
     // provide the templateCompiler that is paired with your Ember version
-    templateCompiler: handlbarsTemplateCompiler
+    // only available when used conjunction with `isHTMLBars: true,`
+    // templateCompiler: handlbarsTemplateCompiler
   });
 }
 
