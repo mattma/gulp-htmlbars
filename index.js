@@ -24,7 +24,8 @@ function getOptions (opts) {
     // `templateCompiler` that is paired with your Ember version
     // only available when used conjunction with `isHTMLBars: true,`
     // isHTMLBars: true,
-    // templateCompiler: require('ember-template-compiler')
+    // Whatever comes with your Ember package template compiler
+    // templateCompiler: require('../bower_components/ember/ember-template-compiler')
   });
 }
 

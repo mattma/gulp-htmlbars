@@ -1,0 +1,6 @@
+{
+  "name": "gulp-htmlbars",
+  "devDependencies": {
+    "ember": "components/ember#beta"
+  }
+}
