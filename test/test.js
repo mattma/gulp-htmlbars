@@ -18,11 +18,15 @@ var filename = path.join(__dirname, './fixtures/template.hbs');
 
 function expectStream (options, done) {
   options = _.defaults(options || {}, {});
+  var wrapper = options.isHTMLBars ?
+    'export default Ember.HTMLBars.template(' :
+    'export default Ember.Handlebars.template(';
+
   return through.obj(function (file, enc, cb) {
     options.contents = fs.readFileSync(file.path, 'utf-8');
     var results = String(file.contents);
     var originalContent = fs.readFileSync(filename);
-    var expected = 'export default Ember.HTMLBars.template(' +
+    var expected = wrapper +
       handlbarsTemplateCompiler.precompile(String(originalContent), false) + ');';
     expect(results).to.deep.equal(expected);
     done();
@@ -31,10 +35,25 @@ function expectStream (options, done) {
 }
 
 describe('gulp-htmlbars', function () {
-  it('should compile templates', function (done) {
-    var opts = {};
-    gulp.src(filename)
-      .pipe(task(opts))
-      .pipe(expectStream({}, done));
+  describe('htmlbars', function() {
+    it('precompiles templates into htmlbars', function(done){
+      var opts = {
+        isHTMLBars : true
+      };
+      gulp.src(filename)
+        .pipe(task())
+        .pipe(expectStream(opts, done));
+    });
+  });
+
+  describe('handlebars', function() {
+    it('compiles .handlebars file', function(done) {
+      var opts = {
+        isHTMLBars: false
+      };
+      gulp.src(filename)
+        .pipe(task(opts))
+        .pipe(expectStream(opts, done));
+    });
   });
 });
