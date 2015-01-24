@@ -5,7 +5,8 @@ var jshint = require('gulp-jshint');
 
 var globs = [
   '**/*.js',
-  '!node_modules/**'
+  '!node_modules/**',
+  '!bower_components/**'
 ];
 
 gulp.task('jshint', function(){

@@ -1,5 +1,9 @@
 var Code = require('code');
-var lab = require('lab').script();
+var lab = require('lab').script({
+  cli: {
+    coverageExclude: ['bower_components']
+  }
+});
 
 module.exports = {
   lab: lab,

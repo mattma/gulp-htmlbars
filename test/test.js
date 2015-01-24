@@ -1,4 +1,3 @@
-/*jshint bitwise: false*/
 'use strict';
 
 exports.lab = require('./helpers/test-helper').lab;
@@ -12,22 +11,32 @@ var through = require('through2');
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
+var htmlBarsCompiler = require('../bower_components/ember/ember-template-compiler');
 var handlbarsTemplateCompiler = require('ember-template-compiler');
 
 var filename = path.join(__dirname, './fixtures/template.hbs');
 
 function expectStream (options, done) {
   options = _.defaults(options || {}, {});
-  var wrapper = options.isHTMLBars ?
-    'export default Ember.HTMLBars.template(' :
-    'export default Ember.Handlebars.template(';
+  var wrapper;
+  var compiler;
+
+  if (options.isHTMLBars) {
+    wrapper = 'export default Ember.HTMLBars.template(';
+    // Compile handlebars template via Bundled compiler which comes with
+    // each release of Ember core version (beta or stable)
+    compiler = options.templateCompiler.precompile;
+  } else {
+    wrapper = 'export default Ember.Handlebars.template(';
+    // Compile handlebars template via default `require('ember-template-compiler')`
+    compiler = handlbarsTemplateCompiler.precompile;
+  }
 
   return through.obj(function (file, enc, cb) {
     options.contents = fs.readFileSync(file.path, 'utf-8');
     var results = String(file.contents);
     var originalContent = fs.readFileSync(filename);
-    var expected = wrapper +
-      handlbarsTemplateCompiler.precompile(String(originalContent), false) + ');';
+    var expected = wrapper + compiler(String(originalContent), false) + ');';
     expect(results).to.deep.equal(expected);
     done();
     cb();
@@ -40,7 +49,7 @@ describe('gulp-htmlbars', function () {
     it('precompiles templates into htmlbars', function(done){
       var opts = {
         isHTMLBars : true,
-        templateCompiler: handlbarsTemplateCompiler
+        templateCompiler: htmlBarsCompiler
       };
       gulp.src(filename)
         .pipe(task(opts))
