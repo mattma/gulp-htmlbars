@@ -1,6 +1,6 @@
 # gulp-htmlbars
 
-> Compiling htmlbars or handlebars for gulp
+> To compile htmlbars and handlebars template for gulp
 
 ## Usage
 

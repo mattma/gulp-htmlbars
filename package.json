@@ -1,7 +1,7 @@
 {
   "name": "gulp-htmlbars",
   "version": "0.1.0",
-  "description": "compile htmlbars and handlebars for ember application",
+  "description": "To compile htmlbars and handlebars template",
   "keywords": [
     "gulpplugin",
     "handlebars",
