@@ -35,19 +35,21 @@ function expectStream (options, done) {
 }
 
 describe('gulp-htmlbars', function () {
+  // By default, isHTMLBars is false
   describe('htmlbars', function() {
     it('precompiles templates into htmlbars', function(done){
       var opts = {
-        isHTMLBars : true
+        isHTMLBars : true,
+        templateCompiler: handlbarsTemplateCompiler
       };
       gulp.src(filename)
-        .pipe(task())
+        .pipe(task(opts))
         .pipe(expectStream(opts, done));
     });
   });
 
   describe('handlebars', function() {
-    it('compiles .handlebars file', function(done) {
+    it('precompiles templates into handlebars', function(done) {
       var opts = {
         isHTMLBars: false
       };
