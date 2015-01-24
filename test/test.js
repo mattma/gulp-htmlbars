@@ -12,26 +12,27 @@ var through = require('through2');
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
+var handlbarsTemplateCompiler = require('ember-template-compiler');
 
-function expectStream(options, done){
-  options = _.defaults(options || {}, {
+var filename = path.join(__dirname, './fixtures/template.hbs');
 
-  });
-  return through.obj(function(file, enc, cb){
+function expectStream (options, done) {
+  options = _.defaults(options || {}, {});
+  return through.obj(function (file, enc, cb) {
     options.contents = fs.readFileSync(file.path, 'utf-8');
-    var expected = _.template(jst, options);
     var results = String(file.contents);
+    var originalContent = fs.readFileSync(filename);
+    var expected = 'export default Ember.HTMLBars.template(' +
+      handlbarsTemplateCompiler.precompile(String(originalContent), false) + ');';
     expect(results).to.deep.equal(expected);
     done();
     cb();
   });
 }
 
-describe('EmberHtmlbars module', function(){
-  it('should some description goes here', function(done){
-    var opts = {
-
-    };
+describe('gulp-htmlbars', function () {
+  it('should compile templates', function (done) {
+    var opts = {};
     gulp.src(filename)
       .pipe(task(opts))
       .pipe(expectStream({}, done));

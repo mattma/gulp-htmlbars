@@ -7,7 +7,7 @@ var PluginError = require('gulp-util').PluginError;
 var HtmlbarsCompiler = require('ember-cli-htmlbars');
 var handlbarsTemplateCompiler = require('ember-template-compiler');
 
-var PLUGIN_NAME = 'gulp-ember-htmlbars';
+var PLUGIN_NAME = 'gulp-htmlbars';
 
 function compile(contents, opts){
   var htmlBarsCompiler = new HtmlbarsCompiler(null, opts);
@@ -24,7 +24,7 @@ function getOptions(opts){
 }
 
 module.exports = function(options){
-  function htmlBars(file, enc, cb){
+  function HtmlBars(file, enc, cb){
     var opts = getOptions(options);
 
     // Optional: handle the `file` is not existed
@@ -44,6 +44,7 @@ module.exports = function(options){
       // `file.contents` type should always be the same going out as it was when it came in
       try {
         operation = compile(String(file.contents), opts);
+        file.contents = new Buffer(operation);
       } catch (err) {
         this.emit('error', new PluginError(PLUGIN_NAME, err, {
           fileName: file.path
@@ -52,11 +53,9 @@ module.exports = function(options){
       }
     }
 
-    file.contents = new Buffer(operation);
-
     this.push(file);
     cb();
   }
 
-  return through.obj(htmlBars);
+  return through.obj(HtmlBars);
 };
