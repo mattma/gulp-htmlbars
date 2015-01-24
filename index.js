@@ -10,16 +10,16 @@ var handlbarsTemplateCompiler = require('ember-template-compiler');
 var PLUGIN_NAME = 'gulp-ember-htmlbars';
 
 function compile(contents, opts){
-  var htmlbarsPrecompile = opts.compiler.precompile;
-  return htmlbarsPrecompile(contents);
+  var htmlbarsCompiler = new HtmlbarsCompiler(null, opts);
+  return htmlbarsCompiler.processString(contents);
 }
 
 function getOptions(opts){
   // opts will always win, override default values
   return defaults(clone(opts) || {}, {
     isHTMLBars: true,
-    // provide the compiler that is paired with your Ember version
-    compiler: handlbarsTemplateCompiler
+    // provide the templateCompiler that is paired with your Ember version
+    templateCompiler: handlbarsTemplateCompiler
   });
 }
 
@@ -42,8 +42,8 @@ module.exports = function(options){
       // Transformation magic happens here.
       // `file.contents` type should always be the same going out as it was when it came in
       var operation = compile(String(file.contents), opts);
-      console.log('operation: ', operation);
-      // file.contents = new Buffer(operation);
+      var contents = new Buffer(operation);
+      file.contents = contents;
     }
 
     this.push(file);
