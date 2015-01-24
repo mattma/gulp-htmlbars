@@ -15,6 +15,7 @@ var htmlBarsCompiler = require('../bower_components/ember/ember-template-compile
 var handlbarsTemplateCompiler = require('ember-template-compiler');
 
 var filename = path.join(__dirname, './fixtures/template.hbs');
+var componentFilename = path.join(__dirname, './fixtures/component-template.hbs');
 
 function expectStream (options, done) {
   options = _.defaults(options || {}, {});
@@ -35,7 +36,9 @@ function expectStream (options, done) {
   return through.obj(function (file, enc, cb) {
     options.contents = fs.readFileSync(file.path, 'utf-8');
     var results = String(file.contents);
-    var originalContent = fs.readFileSync(filename);
+    var originalContent = (options.filepath) ?
+      fs.readFileSync(options.filepath) :
+      fs.readFileSync(filename);
     var expected = wrapper + compiler(String(originalContent), false) + ');';
     expect(results).to.deep.equal(expected);
     done();
@@ -45,24 +48,47 @@ function expectStream (options, done) {
 
 describe('gulp-htmlbars', function () {
   // By default, isHTMLBars is false
-  describe('htmlbars', function() {
-    it('precompiles templates into htmlbars', function(done){
+  describe('htmlbars', function () {
+    it('precompiles templates into htmlbars', function (done) {
       var opts = {
-        isHTMLBars : true,
+        isHTMLBars:       true,
         templateCompiler: htmlBarsCompiler
       };
       gulp.src(filename)
         .pipe(task(opts))
         .pipe(expectStream(opts, done));
     });
+
+    it('precompiles component based template into htmlbars', function (done) {
+      var opts = {
+        isHTMLBars:       true,
+        templateCompiler: htmlBarsCompiler,
+        // this is convenient property ONLY for testing purpose
+        filepath:         componentFilename
+      };
+      gulp.src(componentFilename)
+        .pipe(task(opts))
+        .pipe(expectStream(opts, done));
+    });
   });
 
-  describe('handlebars', function() {
-    it('precompiles templates into handlebars', function(done) {
+  describe('handlebars', function () {
+    it('precompiles templates into handlebars', function (done) {
       var opts = {
         isHTMLBars: false
       };
       gulp.src(filename)
+        .pipe(task(opts))
+        .pipe(expectStream(opts, done));
+    });
+
+    it('precompiles component based template into handlebars', function (done) {
+      var opts = {
+        isHTMLBars: false,
+        // this is convenient property ONLY for testing purpose
+        filepath:         componentFilename
+      };
+      gulp.src(componentFilename)
         .pipe(task(opts))
         .pipe(expectStream(opts, done));
     });
