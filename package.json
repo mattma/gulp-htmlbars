@@ -1,5 +1,5 @@
 {
-  "name": "gulp-ember-htmlbars",
+  "name": "gulp-htmlbars",
   "version": "0.1.0",
   "description": "compile htmlbars and handlebars for ember application",
   "keywords": [
@@ -9,7 +9,7 @@
     "ember",
     "ember-rocks"
   ],
-  "repository": "https://github.com/mattma/gulp-ember-htmlbars.git",
+  "repository": "https://github.com/mattma/gulp-htmlbars.git",
   "author": "Matt Ma <matt@mattmadesign.com>",
   "dependencies": {
     "ember-cli-htmlbars": "^0.6.0",

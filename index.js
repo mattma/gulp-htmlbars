@@ -10,8 +10,8 @@ var handlbarsTemplateCompiler = require('ember-template-compiler');
 var PLUGIN_NAME = 'gulp-ember-htmlbars';
 
 function compile(contents, opts){
-  var htmlbarsCompiler = new HtmlbarsCompiler(null, opts);
-  return htmlbarsCompiler.processString(contents);
+  var htmlBarsCompiler = new HtmlbarsCompiler(null, opts);
+  return htmlBarsCompiler.processString(contents);
 }
 
 function getOptions(opts){
@@ -24,7 +24,7 @@ function getOptions(opts){
 }
 
 module.exports = function(options){
-  function emberHtmlbars(file, enc, cb){
+  function htmlBars(file, enc, cb){
     var opts = getOptions(options);
 
     // Optional: handle the `file` is not existed
@@ -39,16 +39,24 @@ module.exports = function(options){
     }
 
     if(file.isBuffer()){
+      var operation;
       // Transformation magic happens here.
       // `file.contents` type should always be the same going out as it was when it came in
-      var operation = compile(String(file.contents), opts);
-      var contents = new Buffer(operation);
-      file.contents = contents;
+      try {
+        operation = compile(String(file.contents), opts);
+      } catch (err) {
+        this.emit('error', new PluginError(PLUGIN_NAME, err, {
+          fileName: file.path
+        }));
+        return cb();
+      }
     }
+
+    file.contents = new Buffer(operation);
 
     this.push(file);
     cb();
   }
 
-  return through.obj(emberHtmlbars);
+  return through.obj(htmlBars);
 };

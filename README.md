@@ -1,13 +1,13 @@
-# gulp-ember-htmlbars
+# gulp-htmlbars
 
-> compile htmlbars and handlebars for ember application
+> Compiling htmlbars or handlebars for gulp
 
 ## Usage
 
-Install `gulp-ember-htmlbars` as a development dependency:
+Install `gulp-htmlbars` as a development dependency:
 
 ```shell
-npm install --save-dev gulp-ember-htmlbars
+npm install --save-dev gulp-htmlbars
 ```
 
 ## LICENSE
