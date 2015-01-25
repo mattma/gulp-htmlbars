@@ -10,7 +10,7 @@ var task = require('../');
 var through = require('through2');
 var path = require('path');
 var fs = require('fs');
-var _ = require('lodash');
+var objectAssign = require('object-assign');
 var handlbarsTemplateCompiler = require('ember-template-compiler');
 
 // Local Tests depends on `bower install ember`, so it could retrieve
@@ -21,7 +21,7 @@ var filename = path.join(__dirname, './fixtures/template.hbs');
 var componentFilename = path.join(__dirname, './fixtures/component-template.hbs');
 
 function expectStream (options, done) {
-  options = _.defaults(options || {}, {});
+  options = objectAssign({}, options);
   var wrapper;
   var compiler;
 
