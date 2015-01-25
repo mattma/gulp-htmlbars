@@ -4,6 +4,9 @@
 
 [![NPM version][npm-image]][npm-url]   [![Build Status][travis-image]][travis-url]   [![Dependency Status][dependency-image]][dependency-url]
 
+[![Code Climate][code-climate-image]][code-climate-url]
+
+
 > To compile htmlbars and handlebars templates for gulp
 
 ## Usage
@@ -184,3 +187,6 @@ gulp-htmlbars is [MIT Licensed](./LICENSE.md).
 
 [dependency-image]: http://img.shields.io/david/strongloop/express.svg
 [dependency-url]: https://david-dm.org/mattma/gulp-htmlbars
+
+[code-climate-image]: https://codeclimate.com/github/mattma/gulp-htmlbars/badges/gpa.svg
+[code-climate-url]: https://codeclimate.com/github/mattma/gulp-htmlbars
