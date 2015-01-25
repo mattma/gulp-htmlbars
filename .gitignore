@@ -3,4 +3,5 @@ node_modules/
 bower_components/
 
 .DS_Store
+coverage.info
 !bower_components/ember/ember-template-compiler.js
