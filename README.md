@@ -2,7 +2,7 @@
 
 [![NPM][npm-badge-image]][npm-badge-url]
 
-[![NPM version][npm-image]][npm-url]  [![Build Status][travis-image]][travis-url]  [![Dependency Status][dependency-image]][dependency-url]
+[![Build Status][travis-image]][travis-url]  [![NPM version][npm-image]][npm-url]  [![NPM download](http://img.shields.io/npm/dm/gulp-htmlbars.svg?style=flat)](https://www.npmjs.org/package/gulp-htmlbars)  [![Dependency Status][dependency-image]][dependency-url]
 
 [![Code Climate](https://codeclimate.com/github/mattma/gulp-htmlbars/badges/gpa.svg)](https://codeclimate.com/github/mattma/gulp-htmlbars) [![Test Coverage](https://codeclimate.com/github/mattma/gulp-htmlbars/badges/coverage.svg)](https://codeclimate.com/github/mattma/gulp-htmlbars)
 
