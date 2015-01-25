@@ -65,6 +65,53 @@ function stringStream() {
 }
 
 describe('gulp-htmlbars', function () {
+  // By default, isHTMLBars is false
+  describe('htmlbars', function () {
+    it('precompiles templates into htmlbars', function (done) {
+      var opts = {
+        isHTMLBars:       true,
+        templateCompiler: htmlBarsCompiler
+      };
+      gulp.src(filename)
+        .pipe(task(opts))
+        .pipe(expectStream(opts, done));
+    });
+
+    it('precompiles component based template into htmlbars', function (done) {
+      var opts = {
+        isHTMLBars:       true,
+        templateCompiler: htmlBarsCompiler,
+        // this is convenient property ONLY for testing purpose
+        filepath:         componentFilename
+      };
+      gulp.src(componentFilename)
+        .pipe(task(opts))
+        .pipe(expectStream(opts, done));
+    });
+  });
+
+  describe('handlebars', function () {
+    it('precompiles templates into handlebars', function (done) {
+      var opts = {
+        isHTMLBars: false
+      };
+      gulp.src(filename)
+        .pipe(task(opts))
+        .pipe(expectStream(opts, done));
+    });
+
+    it('precompiles component based template into handlebars', function (done) {
+      var opts = {
+        isHTMLBars: false,
+        // this is convenient property ONLY for testing purpose
+        filepath:   componentFilename
+      };
+      gulp.src(componentFilename)
+        .pipe(task(opts))
+        .pipe(expectStream(opts, done));
+    });
+  });
+
   describe('error', function () {
     var testNull = new Vinyl({
       cwd:      "/home/mattma/broken-promises/",
@@ -113,53 +160,6 @@ describe('gulp-htmlbars', function () {
 
       stream.write(testStream);
       stream.end();
-    });
-  });
-
-  // By default, isHTMLBars is false
-  describe('htmlbars', function () {
-    it('precompiles templates into htmlbars', function (done) {
-      var opts = {
-        isHTMLBars:       true,
-        templateCompiler: htmlBarsCompiler
-      };
-      gulp.src(filename)
-        .pipe(task(opts))
-        .pipe(expectStream(opts, done));
-    });
-
-    it('precompiles component based template into htmlbars', function (done) {
-      var opts = {
-        isHTMLBars:       true,
-        templateCompiler: htmlBarsCompiler,
-        // this is convenient property ONLY for testing purpose
-        filepath:         componentFilename
-      };
-      gulp.src(componentFilename)
-        .pipe(task(opts))
-        .pipe(expectStream(opts, done));
-    });
-  });
-
-  describe('handlebars', function () {
-    it('precompiles templates into handlebars', function (done) {
-      var opts = {
-        isHTMLBars: false
-      };
-      gulp.src(filename)
-        .pipe(task(opts))
-        .pipe(expectStream(opts, done));
-    });
-
-    it('precompiles component based template into handlebars', function (done) {
-      var opts = {
-        isHTMLBars: false,
-        // this is convenient property ONLY for testing purpose
-        filepath:   componentFilename
-      };
-      gulp.src(componentFilename)
-        .pipe(task(opts))
-        .pipe(expectStream(opts, done));
     });
   });
 });
