@@ -6,8 +6,6 @@ var defaults = require('lodash').defaults;
 var PluginError = require('gulp-util').PluginError;
 var HtmlbarsCompiler = require('ember-cli-htmlbars');
 
-var PLUGIN_NAME = 'gulp-htmlbars';
-
 function compile (contents, opts) {
   var contentsToString = String(contents);
   var htmlBarsCompiler = new HtmlbarsCompiler(null, opts);
@@ -35,28 +33,24 @@ module.exports = function (options) {
 
     // Optional: handle the `file` is not existed
     if (file.isNull()) {
-      return cb(null, file);  // return an empty file
+      cb(null, file);  // return an empty file
+      return;
     }
 
     // Do not do streams by gulp design
     if (file.isStream()) {
-      this.emit('error', new PluginError(PLUGIN_NAME, 'Streaming not supported'));
-      return cb();
+      cb(new PluginError('gulp-htmlbars', 'Streaming not supported'));
+      return;
     }
 
-    if (file.isBuffer()) {
-      // `file.contents` type should always be the same going out as it was when it came in
-      try {
-        file.contents = compile(file.contents, opts);
-      } catch (err) {
-        this.emit('error', new PluginError(PLUGIN_NAME, err, {
-          fileName: file.path
-        }));
-        return cb();
-      }
+    // `file.contents` type should always be the same going out as it was when it came in
+    try {
+      file.contents = compile(file.contents, opts);
+      this.push(file);
+    } catch (err) {
+      this.emit('error', new PluginError('gulp-htmlbars', err, {fileName: file.path}));
     }
 
-    this.push(file);
     cb();
   }
 
