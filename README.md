@@ -1,5 +1,9 @@
 # gulp-htmlbars
 
+[![NPM][npm-badge-image]][npm-badge-url]
+
+[![NPM version][npm-image]][npm-url]   [![Build Status][travis-image]][travis-url]   [![Dependency Status][dependency-image]][dependency-url]
+
 > To compile htmlbars and handlebars templates for gulp
 
 ## Usage
@@ -154,6 +158,18 @@ Ex: `templateCompiler: require('../bower_components/ember/ember-template-compile
 
 ## LICENSE
 
-gulp-htmlbars is [MIT Licensed](./LICENSE.md).
+Copyright (c) 2015 [Matt Ma](http://mattmadesign.com)
 
-Copyright (c) 2015 Matt Ma.
+gulp-htmlbars is [MIT Licensed](./LICENSE).
+
+[npm-badge-url]: https://nodei.co/npm/gulp-htmlbars/
+[npm-badge-image]: https://nodei.co/npm/gulp-htmlbars.png
+
+[npm-url]: https://www.npmjs.org/package/gulp-htmlbars
+[npm-image]: http://img.shields.io/npm/v/npm.svg
+
+[travis-image]: https://travis-ci.org/mattma/gulp-htmlbars.svg
+[travis-url]: https://travis-ci.org/mattma/gulp-htmlbars
+
+[dependency-image]: http://img.shields.io/david/strongloop/express.svg
+[dependency-url]: https://david-dm.org/mattma/gulp-htmlbars
