@@ -10,6 +10,7 @@ var task = require('../');
 var through = require('through2');
 var path = require('path');
 var fs = require('fs');
+var Vinyl = require('vinyl');
 var objectAssign = require('object-assign');
 var handlbarsTemplateCompiler = require('ember-template-compiler');
 
@@ -50,6 +51,35 @@ function expectStream (options, done) {
 }
 
 describe('gulp-htmlbars', function () {
+  describe('error', function () {
+    var testFile1 = new Vinyl({
+      cwd:      "/home/mattma/broken-promises/",
+      base:     "/home/mattma/broken-promises/test",
+      path:     "/home/mattma/broken-promises/test/test1.js",
+      contents: null
+    });
+
+    it('test null case when file.isNull() is true', function (done) {
+      var stream = task();
+
+      stream.on('data', function (newFile) {
+        //t.ok(newFile, 'emits a file');
+        //t.ok(newFile.path, 'file has a path');
+        //t.ok(newFile.relative, 'file has relative path information');
+        //t.ok(!newFile.contents, 'file does not have contents');
+        //
+        //t.ok(newFile instanceof Vinyl, 'file is Vinyl');
+        //
+        //t.equals(newFile.contents, null);
+        expect(newFile.contents).to.be.null();
+        done();
+      });
+
+      stream.write(testFile1);
+      stream.end();
+    });
+  });
+
   // By default, isHTMLBars is false
   describe('htmlbars', function () {
     it('precompiles templates into htmlbars', function (done) {
