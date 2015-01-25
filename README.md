@@ -10,7 +10,7 @@ Install `gulp-htmlbars` as a development dependency:
 npm install --save-dev gulp-htmlbars
 ```
 
-## [Compiling templates for the browser](examples/amd). (**AMD format**)
+## [Compiling *handlebars* templates for the browser](examples/amd). (**AMD format**)
 
 [`gulp-wrap-amd`](https://github.com/phated/gulp-wrap-amd.git), is maintained by [@phated](blaine@iceddev.com) and myself, can be used to safely convert templates into AMD syntax available for use in the browser.
 
@@ -51,7 +51,6 @@ gulp.task('templates', function(){
     .pipe(concat('templates.js'))
     .pipe(gulp.dest('build/js/'));
 });
-
 ```
 
 The template's definition is combined with the namespace, add optional module dependency and local variable, so the resulting `build/js/templates.js` would look like:
@@ -83,6 +82,29 @@ define("rocks/header", ["exports"], function(__exports__) {
 });
 ```
 
+## Compiling *htmlbars* templates for the browser. (**AMD format**)
+
+#### gulpfile.js
+
+```js
+gulp.task('templates', function(){
+  gulp.src('source/templates/*.hbs')
+    .pipe(htmlbars({
+      isHTMLBars:       true,
+      // see #API section for more details
+      templateCompiler: require('../bower_components/ember/ember-template-compiler')
+    }))
+    .pipe(wrap({
+      deps:         ['exports'],          // optional, dependency array
+      params:       ['__exports__'],      // optional, params for callback
+      moduleRoot:   'source/templates/',  // optional
+      modulePrefix: 'rocks/'              // optional
+    }))
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest('build/js/'));
+});
+```
+
 ## Compiling templates for use in Ember applications
 
 See the [ember-rocks](https://github.com/mattma/ember-rocks) for a full example of compiling templates for Ember.
@@ -108,6 +130,27 @@ gulp.task('templates', function(){
     .pipe(gulp.dest('build/js/'));
 });
 ```
+
+## API
+
+### htmlbars(options)
+
+#### options.isHTMLBars
+Type: `Boolean`
+
+By default, `options.isHTMLBars` is false. It will wrap the compiled template inside *Handlebars*, ex: "Ember.Handlebars.template(...)". If true,
+It will wrap the compiled template inside *HTMLBars*, ex: "Ember.HTMLBars.template(...)".
+
+Note: When `options.isHTMLBars` is true, you need to define the template compiler function via `options.templateCompiler`
+
+#### options.templateCompiler
+Type: `Function`
+
+By default, `options.templateCompiler` is null. It is used in conjunction with `options.isHTMLBars: true`. Each `Ember` core version (beta or stable)
+will bundle the `ember-template-compiler.js` script to compile HTMLBars template. It is because the HTMLBars project is in the heavy development cycle.
+
+Ex: `templateCompiler: require('../bower_components/ember/ember-template-compiler')`
+
 
 ## LICENSE
 
