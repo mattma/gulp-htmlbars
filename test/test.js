@@ -53,10 +53,10 @@ function expectStream (options, done) {
   });
 }
 
-function stringStream() {
+function stringStream () {
   var stream = new Readable();
 
-  stream._read = function() {
+  stream._read = function () {
     this.push('mattma');
     this.push(null);
   };
@@ -121,10 +121,17 @@ describe('gulp-htmlbars', function () {
     });
 
     var testStream = new Vinyl({
-      cwd: "/home/mattma/broken-promises/",
-      base: "/home/mattma/broken-promises/test",
-      path: "/home/mattma/broken-promises/test/test1.js",
+      cwd:      "/home/mattma/broken-promises/",
+      base:     "/home/mattma/broken-promises/test",
+      path:     "/home/mattma/broken-promises/test/test1.js",
       contents: stringStream()
+    });
+
+    var testError = new Vinyl({
+      cwd:      "/home/mattma/broken-promises/",
+      base:     "/home/mattma/broken-promises/test",
+      path:     "/home/mattma/broken-promises/test/testError1.js",
+      contents: new Buffer("<div> {invalidBracket} </div>")
     });
 
     it('test null case when file.isNull() is true', function (done) {
@@ -148,10 +155,10 @@ describe('gulp-htmlbars', function () {
     it('test stream case when file.isStream() is true', function (done) {
       var stream = task();
 
-      stream.on('error', function(e){
+      stream.on('error', function (e) {
         expect(e).to.be.an.instanceof(PluginError); // 'error is a PluginError'
         expect(e.plugin).to.equal('gulp-htmlbars'); // 'error is from gulp-htmlbars'
-        expect(e.fileName).to.equal(testStream.path); // 'error reports the correct file'
+        expect(e.fileName).to.equal(testStream.path); // 'error reports the correct file name'
         expect(e.message).to.equal('Streaming not supported'); // 'error reports the correct file'
         expect(e.showStack).to.be.false(); // 'error is configured to not print stack'
         expect(e.showProperties).to.be.true(); // 'error is configured to show showProperties'
@@ -159,6 +166,29 @@ describe('gulp-htmlbars', function () {
       });
 
       stream.write(testStream);
+      stream.end();
+    });
+
+    it('test buffer(pass through) case and should report files in error', function (done) {
+      var stream = task({
+        isHTMLBars:       true,
+        // `templateCompiler` is a no-op, it does not have `precompile` method
+        templateCompiler: function() {}
+      });
+
+      stream.on('error', function (e) {
+        expect(e).to.be.an.instanceof(Error); // 'argument should be of type error'
+        expect(e.plugin).to.equal('gulp-htmlbars'); // 'error is from gulp-htmlbars'
+        expect(e.fileName).to.equal(testError.path); // 'error reports the correct file name'
+        expect(e.name).to.equal('TypeError');
+        expect(e.message).to.equal('undefined is not a function');
+        expect(e.stack).to.be.exist();     // 'error reports the correct file'
+        expect(e.showStack).to.be.false(); // 'error is configured to not print stack'
+        expect(e.showProperties).to.be.true(); // 'error is configured to show showProperties'
+        done();
+      });
+
+      stream.write(testError);
       stream.end();
     });
   });
