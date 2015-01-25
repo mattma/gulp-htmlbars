@@ -177,6 +177,7 @@ describe('gulp-htmlbars', function () {
 
     it('test buffer(pass through) case and should report files in error', function (done) {
       var noOps = new NoOps();
+      console.log('typeof noOps.precompile: ', typeof noOps.precompile);
       var stream = task({
         isHTMLBars:       true,
         // `templateCompiler` is a no-op, it does not have `precompile` method
