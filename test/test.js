@@ -63,14 +63,12 @@ describe('gulp-htmlbars', function () {
       var stream = task();
 
       stream.on('data', function (newFile) {
-        //t.ok(newFile, 'emits a file');
-        //t.ok(newFile.path, 'file has a path');
-        //t.ok(newFile.relative, 'file has relative path information');
-        //t.ok(!newFile.contents, 'file does not have contents');
-        //
-        //t.ok(newFile instanceof Vinyl, 'file is Vinyl');
-        //
-        //t.equals(newFile.contents, null);
+        expect(newFile).to.be.exist();          // 'emits a file'
+        expect(newFile.path).to.be.exist();     // 'file has a path'
+        expect(newFile.relative).to.be.exist(); // 'file has relative path information'
+        expect(newFile.contents).to.not.be.exist(); // 'file does not have contents'
+        expect(newFile).to.be.an.instanceof(Vinyl); // 'file is Vinyl'
+
         expect(newFile.contents).to.be.null();
         done();
       });
