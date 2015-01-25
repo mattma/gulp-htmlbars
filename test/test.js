@@ -138,7 +138,10 @@ describe('gulp-htmlbars', function () {
     });
 
     function NoOps () { }
-    NoOps.prototype.precompile = function() { };
+    NoOps.prototype.precompile = function(str, opt) {
+      console.log('str: ', str);
+      console.log('opt: ', opt);
+    };
 
     it('test null case when file.isNull() is true', function (done) {
       var stream = task();
