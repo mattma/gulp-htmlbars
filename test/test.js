@@ -137,8 +137,8 @@ describe('gulp-htmlbars', function () {
       contents: new Buffer("<div> {invalidBracket} </div>")
     });
 
-    var noOps = {};
-    noOps.precompile = function() { };
+    function NoOps () { }
+    NoOps.prototype.precompile = function() { };
 
     it('test null case when file.isNull() is true', function (done) {
       var stream = task();
@@ -176,6 +176,7 @@ describe('gulp-htmlbars', function () {
     });
 
     it('test buffer(pass through) case and should report files in error', function (done) {
+      var noOps = new NoOps();
       var stream = task({
         isHTMLBars:       true,
         // `templateCompiler` is a no-op, it does not have `precompile` method
