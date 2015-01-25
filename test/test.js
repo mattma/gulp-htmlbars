@@ -55,7 +55,7 @@ describe('gulp-htmlbars', function () {
     var testFile1 = new Vinyl({
       cwd:      "/home/mattma/broken-promises/",
       base:     "/home/mattma/broken-promises/test",
-      path:     "/home/mattma/broken-promises/test/test1.js",
+      path:     "/home/mattma/broken-promises/test/test1.hbs",
       contents: null
     });
 
