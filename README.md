@@ -1,36 +1,116 @@
 # gulp-htmlbars
 
-> To compile htmlbars and handlebars template for gulp
+> To compile htmlbars and handlebars templates for gulp
 
 ## Usage
 
 Install `gulp-htmlbars` as a development dependency:
 
-```shell
+```bash
 npm install --save-dev gulp-htmlbars
+```
+
+## [Compiling templates for the browser](examples/amd). (**AMD format**)
+
+[`gulp-wrap-amd`](https://github.com/phated/gulp-wrap-amd.git), is maintained by [@phated](blaine@iceddev.com) and myself, can be used to safely convert templates into AMD syntax available for use in the browser.
+
+First, install development dependencies:
+
+```shell
+npm install --save-dev gulp-htmlbars gulp-wrap-amd gulp-concat gulp
+```
+
+Given the following directory structure:
+
+```
+├── gulpfile.js              # Your gulpfile
+└── source/                  # Your application's source files
+    └── templates/           # A folder containing templates named with dot notation
+        └── header.hbs       # A template that will be available as MyApp.templates.home.header
+```
+
+To compile all templates in `source/templates/` to `build/js/templates.js` under the `MyApp.templates` namespace:
+
+#### gulpfile.js
+
+```js
+var gulp = require('gulp');
+var htmlbars = require('gulp-htmlbars');
+var wrap = require('gulp-wrap-amd');
+var concat = require('gulp-concat');
+
+gulp.task('templates', function(){
+  gulp.src('source/templates/*.hbs')
+    .pipe(htmlbars())
+    .pipe(wrap({
+      deps:         ['exports'],          // optional, dependency array
+      params:       ['__exports__'],      // optional, params for callback
+      moduleRoot:   'source/templates/',  // optional
+      modulePrefix: 'rocks/'              // optional
+    }))
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest('build/js/'));
+});
+
+```
+
+The template's definition is combined with the namespace, add optional module dependency and local variable, so the resulting `build/js/templates.js` would look like:
+
+```js
+define("rocks/header", ["exports"], function(__exports__) {
+  return export default Ember.Handlebars.template({
+    "compiler": [6, ">= 2.0.0-beta.1"],
+    "main": function(depth0, helpers, partials, data) {
+      var stack1, buffer = '';
+      data.buffer.push("<header>\n  ");
+      stack1 = helpers._triageMustache.call(depth0, "header_content", {
+        "name": "_triageMustache",
+        "hash": {},
+        "hashTypes": {},
+        "hashContexts": {},
+        "types": ["ID"],
+        "contexts": [depth0],
+        "data": data
+      });
+      if (stack1 != null) {
+        data.buffer.push(stack1);
+      }
+      data.buffer.push("\n</header>\n");
+      return buffer;
+    },
+    "useData": true
+  });
+});
+```
+
+## Compiling templates for use in Ember applications
+
+See the [ember-rocks](https://github.com/mattma/ember-rocks) for a full example of compiling templates for Ember.
+
+You can use [`gulp-replace`](https://www.npmjs.com/package/gulp-replace) to modfiy the output, and then use within *Ember*, *Ember-Rocks*, or *Ember-Cli*:
+
+#### gulpfile.js
+
+```js
+gulp.task('templates', function(){
+  gulp.src('source/templates/*.hbs')
+    .pipe(htmlbars())
+    .pipe(wrap({
+      deps:         ['exports'],          // dependency array
+      params:       ['__exports__'],        // params for callback
+      moduleRoot:   'source/templates/',
+      modulePrefix: 'rocks/'
+    }))
+    .pipe(replace(
+      /return export default/, 'return __exports__["default"] ='
+    ))
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest('build/js/'));
+});
 ```
 
 ## LICENSE
 
-(MIT License)
+gulp-htmlbars is [MIT Licensed](./LICENSE.md).
 
-Copyright (c) 2015 Matt Ma
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Copyright (c) 2015 Matt Ma.
