@@ -135,6 +135,17 @@ gulp.task('templates', function(){
 });
 ```
 
+## Test
+
+Before running the tests, need to run `bower install` at the root level, to have an `Ember` package in the local directory ("./bower_components").
+**HTMLBars** is in a heavy development along with `Ember` project, each `Ember` release (Beta or Stable) will ship its bundled compiler for specific `Ember` version.
+
+Once you have the `Ember-template-compiler` dependency ready, you could run
+
+```bash
+npm test  # kick start your local tests
+```
+
 ## API
 
 ### htmlbars(options)
@@ -160,7 +171,7 @@ Ex: `templateCompiler: require('../bower_components/ember/ember-template-compile
 
 Copyright (c) 2015 [Matt Ma](http://mattmadesign.com)
 
-gulp-htmlbars is [MIT Licensed](./LICENSE).
+gulp-htmlbars is [MIT Licensed](./LICENSE.md).
 
 [npm-badge-url]: https://nodei.co/npm/gulp-htmlbars/
 [npm-badge-image]: https://nodei.co/npm/gulp-htmlbars.png

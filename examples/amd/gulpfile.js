@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp');
 var htmlbars = require('gulp-htmlbars');
 var wrap = require('gulp-wrap-amd');
