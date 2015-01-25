@@ -34,7 +34,7 @@ module.exports = function (options) {
 
     // Do not do streams by gulp design
     if (file.isStream()) {
-      cb(new PluginError('gulp-htmlbars', 'Streaming not supported'));
+      cb(new PluginError('gulp-htmlbars', 'Streaming not supported', {fileName: file.path}));
       return;
     }
 

@@ -6,13 +6,16 @@ var it = require('./helpers/test-helper').it;
 var expect = require('./helpers/test-helper').expect;
 
 var gulp = require('gulp');
+var PluginError = require('gulp-util').PluginError;
 var task = require('../');
 var through = require('through2');
 var path = require('path');
 var fs = require('fs');
-var Vinyl = require('vinyl');
 var objectAssign = require('object-assign');
 var handlbarsTemplateCompiler = require('ember-template-compiler');
+
+var Vinyl = require('vinyl');
+var Readable = require('stream').Readable;
 
 // Local Tests depends on `bower install ember`, so it could retrieve
 // `ember-template-compiler.js` from the ember release bundle
@@ -50,13 +53,31 @@ function expectStream (options, done) {
   });
 }
 
+function stringStream() {
+  var stream = new Readable();
+
+  stream._read = function() {
+    this.push('mattma');
+    this.push(null);
+  };
+
+  return stream;
+}
+
 describe('gulp-htmlbars', function () {
   describe('error', function () {
-    var testFile1 = new Vinyl({
+    var testNull = new Vinyl({
       cwd:      "/home/mattma/broken-promises/",
       base:     "/home/mattma/broken-promises/test",
       path:     "/home/mattma/broken-promises/test/test1.hbs",
       contents: null
+    });
+
+    var testStream = new Vinyl({
+      cwd: "/home/mattma/broken-promises/",
+      base: "/home/mattma/broken-promises/test",
+      path: "/home/mattma/broken-promises/test/test1.js",
+      contents: stringStream()
     });
 
     it('test null case when file.isNull() is true', function (done) {
@@ -73,7 +94,24 @@ describe('gulp-htmlbars', function () {
         done();
       });
 
-      stream.write(testFile1);
+      stream.write(testNull);
+      stream.end();
+    });
+
+    it('test stream case when file.isStream() is true', function (done) {
+      var stream = task();
+
+      stream.on('error', function(e){
+        expect(e).to.be.an.instanceof(PluginError); // 'error is a PluginError'
+        expect(e.plugin).to.equal('gulp-htmlbars'); // 'error is from gulp-htmlbars'
+        expect(e.fileName).to.equal(testStream.path); // 'error reports the correct file'
+        expect(e.message).to.equal('Streaming not supported'); // 'error reports the correct file'
+        expect(e.showStack).to.be.false(); // 'error is configured to not print stack'
+        expect(e.showProperties).to.be.true(); // 'error is configured to show showProperties'
+        done();
+      });
+
+      stream.write(testStream);
       stream.end();
     });
   });
