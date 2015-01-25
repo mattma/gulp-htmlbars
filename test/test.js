@@ -11,13 +11,11 @@ var through = require('through2');
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
+var handlbarsTemplateCompiler = require('ember-template-compiler');
+
 // Local Tests depends on `bower install ember`, so it could retrieve
 // `ember-template-compiler.js` from the ember release bundle
 var htmlBarsCompiler = require('../bower_components/ember/ember-template-compiler');
-// Travis CI won't be able to install ember package
-// so manually include this script for CI to process/compile the templates
-var htmlBarsCompilerForTravisCI = require('./helpers/ember-template-compiler');
-var handlbarsTemplateCompiler = require('ember-template-compiler');
 
 var filename = path.join(__dirname, './fixtures/template.hbs');
 var componentFilename = path.join(__dirname, './fixtures/component-template.hbs');
@@ -31,9 +29,7 @@ function expectStream (options, done) {
     wrapper = 'export default Ember.HTMLBars.template(';
     // Compile handlebars template via Bundled compiler which comes with
     // each release of Ember core version (beta or stable)
-    compiler = (htmlBarsCompiler) ?
-      options.templateCompiler.precompile :
-      htmlBarsCompilerForTravisCI;
+    compiler = options.templateCompiler.precompile;
   } else {
     wrapper = 'export default Ember.Handlebars.template(';
     // Compile handlebars template via default `require('ember-template-compiler')`

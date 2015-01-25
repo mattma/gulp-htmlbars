@@ -6,8 +6,7 @@ var jshint = require('gulp-jshint');
 var globs = [
   '**/*.js',
   '!node_modules/**',
-  '!bower_components/**',
-  '!test/helpers/ember-template-compiler.js'
+  '!bower_components/**'
 ];
 
 gulp.task('jshint', function(){
