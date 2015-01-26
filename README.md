@@ -153,22 +153,35 @@ npm test  # kick start your local tests
 
 ### htmlbars(options)
 
+`options` is an optional object. By default, calling `htmlbars()` without any argument, and it will compile the given templates with **Handlebars** compiler.
+
 #### options.isHTMLBars
 Type: `Boolean`
+Default: false
 
-By default, `options.isHTMLBars` is false. It will wrap the compiled template inside *Handlebars*, ex: "Ember.Handlebars.template(...)". If true,
-It will wrap the compiled template inside *HTMLBars*, ex: "Ember.HTMLBars.template(...)".
+By default, `isHTMLBars` is false. It will wrap the compiled template inside *Handlebars*, ex: "Ember.Handlebars.template(...)".
+If true, It will wrap the compiled template inside *HTMLBars*, ex: "Ember.HTMLBars.template(...)".
 
-Note: When `options.isHTMLBars` is true, you need to define the template compiler function via `options.templateCompiler`
+Note: When `isHTMLBars` is true, you need to define the template compiler function via `options.templateCompiler`
+
+```js
+var options = {
+  isHTMLBars:       true,
+  templateCompiler:  require('../bower_components/ember/ember-template-compiler')
+};
+gulp.src(glob)
+  .pipe(task(options))
+  .pipe(gulp.dest('build/js/'));
+```
 
 #### options.templateCompiler
 Type: `Function`
+Default: null
 
-By default, `options.templateCompiler` is null. It is used in conjunction with `options.isHTMLBars: true`. Each `Ember` core version (beta or stable)
+By default, `templateCompiler` is null. It is used in conjunction with `isHTMLBars: true}`. Each `Ember` core version (beta or stable)
 will bundle the `ember-template-compiler.js` script to compile HTMLBars template. It is because the HTMLBars project is in the heavy development cycle.
 
 Ex: `templateCompiler: require('../bower_components/ember/ember-template-compiler')`
-
 
 ## LICENSE
 
