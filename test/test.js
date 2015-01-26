@@ -139,7 +139,7 @@ describe('gulp-htmlbars', function () {
 
     function NoOps () { }
     NoOps.prototype.precompile = function(str) {
-      this.emit('error', str);
+      throw new Error(str);
     };
 
     it('test null case when file.isNull() is true', function (done) {
@@ -189,8 +189,8 @@ describe('gulp-htmlbars', function () {
         expect(e).to.be.an.instanceof(Error); // 'argument should be of type error'
         expect(e.plugin).to.equal('gulp-htmlbars'); // 'error is from gulp-htmlbars'
         expect(e.fileName).to.equal(testError.path); // 'error reports the correct file name'
-        expect(e.name).to.equal('TypeError');
-        expect(e.message).to.equal('undefined is not a function');
+        expect(e.name).to.be.exist();
+        expect(e.message).to.equal('<div>Hello world</div>');
         expect(e.stack).to.be.exist();     // 'error reports the correct file'
         expect(e.showStack).to.be.false(); // 'error is configured to not print stack'
         expect(e.showProperties).to.be.true(); // 'error is configured to show showProperties'
