@@ -134,13 +134,12 @@ describe('gulp-htmlbars', function () {
       cwd:      "/home/mattma/broken-promises/",
       base:     "/home/mattma/broken-promises/test",
       path:     "/home/mattma/broken-promises/test/testError1.js",
-      contents: new Buffer("<div> {invalidBracket} </div>")
+      contents: new Buffer("<div>Hello world</div>")
     });
 
     function NoOps () { }
-    NoOps.prototype.precompile = function(str, opt) {
-      console.log('str: ', str);
-      console.log('opt: ', opt);
+    NoOps.prototype.precompile = function(str) {
+      this.emit('error', str);
     };
 
     it('test null case when file.isNull() is true', function (done) {
@@ -178,29 +177,28 @@ describe('gulp-htmlbars', function () {
       stream.end();
     });
 
-    //it('test buffer(pass through) case and should report files in error', function (done) {
-    //  var noOps = new NoOps();
-    //  console.log('typeof noOps.precompile: ', typeof noOps.precompile);
-    //  var stream = task({
-    //    isHTMLBars:       true,
-    //    // `templateCompiler` is a no-op, it does not have `precompile` method
-    //    templateCompiler: noOps.precompile
-    //  });
-    //
-    //  stream.on('error', function (e) {
-    //    expect(e).to.be.an.instanceof(Error); // 'argument should be of type error'
-    //    expect(e.plugin).to.equal('gulp-htmlbars'); // 'error is from gulp-htmlbars'
-    //    expect(e.fileName).to.equal(testError.path); // 'error reports the correct file name'
-    //    expect(e.name).to.equal('TypeError');
-    //    expect(e.message).to.equal('undefined is not a function');
-    //    expect(e.stack).to.be.exist();     // 'error reports the correct file'
-    //    expect(e.showStack).to.be.false(); // 'error is configured to not print stack'
-    //    expect(e.showProperties).to.be.true(); // 'error is configured to show showProperties'
-    //    done();
-    //  });
-    //
-    //  stream.write(testError);
-    //  stream.end();
-    //});
+    it('test buffer(pass through) case and should report files in error', function (done) {
+      var noOps = new NoOps();
+      var stream = task({
+        isHTMLBars:       true,
+        // `templateCompiler` is a no-op, it does not have `precompile` method
+        templateCompiler: noOps
+      });
+
+      stream.on('error', function (e) {
+        expect(e).to.be.an.instanceof(Error); // 'argument should be of type error'
+        expect(e.plugin).to.equal('gulp-htmlbars'); // 'error is from gulp-htmlbars'
+        expect(e.fileName).to.equal(testError.path); // 'error reports the correct file name'
+        expect(e.name).to.equal('TypeError');
+        expect(e.message).to.equal('undefined is not a function');
+        expect(e.stack).to.be.exist();     // 'error reports the correct file'
+        expect(e.showStack).to.be.false(); // 'error is configured to not print stack'
+        expect(e.showProperties).to.be.true(); // 'error is configured to show showProperties'
+        done();
+      });
+
+      stream.write(testError);
+      stream.end();
+    });
   });
 });
