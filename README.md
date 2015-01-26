@@ -4,7 +4,7 @@
 
 [![Build Status][travis-image]][travis-url]  [![NPM version][npm-image]][npm-url]  [![NPM download](http://img.shields.io/npm/dm/gulp-htmlbars.svg?style=flat)](https://www.npmjs.org/package/gulp-htmlbars)  [![Dependency Status][dependency-image]][dependency-url]
 
-[![Code Climate](https://codeclimate.com/github/mattma/gulp-htmlbars/badges/gpa.svg)](https://codeclimate.com/github/mattma/gulp-htmlbars) [![Test Coverage](https://codeclimate.com/github/mattma/gulp-htmlbars/badges/coverage.svg)](https://codeclimate.com/github/mattma/gulp-htmlbars)
+[![Code Climate][code-climate-image]][code-climate-url] [![Test Coverage][coverage-image]][coverage-url]
 
 
 > To compile htmlbars and handlebars templates for gulp
@@ -187,3 +187,9 @@ gulp-htmlbars is [MIT Licensed](./LICENSE.md).
 
 [dependency-image]: http://img.shields.io/david/strongloop/express.svg
 [dependency-url]: https://david-dm.org/mattma/gulp-htmlbars
+
+[code-climate-image]: https://codeclimate.com/github/mattma/gulp-htmlbars/badges/gpa.svg
+[code-climate-url]: https://codeclimate.com/github/mattma/gulp-htmlbars
+
+[coverage-image]: https://codeclimate.com/github/mattma/gulp-htmlbars/badges/coverage.svg
+[coverage-url]: https://codeclimate.com/github/mattma/gulp-htmlbars

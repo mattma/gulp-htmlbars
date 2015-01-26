@@ -134,10 +134,12 @@ describe('gulp-htmlbars', function () {
       cwd:      "/home/mattma/broken-promises/",
       base:     "/home/mattma/broken-promises/test",
       path:     "/home/mattma/broken-promises/test/testError1.js",
-      contents: new Buffer("<div>Hello world</div>")
+      contents: new Buffer("<div>{{Hello_world}}</div>")
     });
 
+    // create a constructor to serve the No-op Error case
     function NoOps () { }
+    // add a new method `precompile` to the constructor
     NoOps.prototype.precompile = function(str) {
       throw new Error(str);
     };
@@ -178,6 +180,8 @@ describe('gulp-htmlbars', function () {
     });
 
     it('test buffer(pass through) case and should report files in error', function (done) {
+      // create a new instance from `NoOps` constructor
+      // so that we could use `precompile` method inside `ember-cli-htmlbars`
       var noOps = new NoOps();
       var stream = task({
         isHTMLBars:       true,
@@ -190,7 +194,7 @@ describe('gulp-htmlbars', function () {
         expect(e.plugin).to.equal('gulp-htmlbars'); // 'error is from gulp-htmlbars'
         expect(e.fileName).to.equal(testError.path); // 'error reports the correct file name'
         expect(e.name).to.be.exist();
-        expect(e.message).to.equal('<div>Hello world</div>');
+        expect(e.message).to.equal('<div>{{Hello_world}}</div>');
         expect(e.stack).to.be.exist();     // 'error reports the correct file'
         expect(e.showStack).to.be.false(); // 'error is configured to not print stack'
         expect(e.showProperties).to.be.true(); // 'error is configured to show showProperties'
