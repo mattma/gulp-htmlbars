@@ -6,6 +6,9 @@
 
 [![Code Climate][code-climate-image]][code-climate-url] [![Test Coverage][coverage-image]][coverage-url]
 
+## Warning
+
+This repo is going to be deprecated and merged its features into [gulp-handlebars](https://github.com/lazd/gulp-handlebars). At the same time, I would be joining as a maintainer of [gulp-handlebars](https://github.com/lazd/gulp-handlebars) repository along with [lzad](https://github.com/lazd). Migration should be done by the **end of March, 2015**.
 
 > To compile htmlbars and handlebars templates for gulp
 
@@ -40,55 +43,6 @@ To compile all templates in `source/templates/` to `build/js/templates.js` under
 
 #### gulpfile.js
 
-```js
-var gulp = require('gulp');
-var htmlbars = require('gulp-htmlbars');
-var wrap = require('gulp-wrap-amd');
-var concat = require('gulp-concat');
-
-gulp.task('templates', function(){
-  gulp.src('source/templates/*.hbs')
-    .pipe(htmlbars())
-    .pipe(wrap({
-      deps:         ['exports'],          // optional, dependency array
-      params:       ['__exports__'],      // optional, params for callback
-      moduleRoot:   'source/templates/',  // optional
-      modulePrefix: 'rocks/'              // optional
-    }))
-    .pipe(concat('templates.js'))
-    .pipe(gulp.dest('build/js/'));
-});
-```
-
-The template's definition is combined with the namespace, add optional module dependency and local variable, so the resulting `build/js/templates.js` would look like:
-
-```js
-define("rocks/header", ["exports"], function(__exports__) {
-  return export default Ember.Handlebars.template({
-    "compiler": [6, ">= 2.0.0-beta.1"],
-    "main": function(depth0, helpers, partials, data) {
-      var stack1, buffer = '';
-      data.buffer.push("<header>\n  ");
-      stack1 = helpers._triageMustache.call(depth0, "header_content", {
-        "name": "_triageMustache",
-        "hash": {},
-        "hashTypes": {},
-        "hashContexts": {},
-        "types": ["ID"],
-        "contexts": [depth0],
-        "data": data
-      });
-      if (stack1 != null) {
-        data.buffer.push(stack1);
-      }
-      data.buffer.push("\n</header>\n");
-      return buffer;
-    },
-    "useData": true
-  });
-});
-```
-
 ## Compiling *htmlbars* templates for the browser. (**AMD format**)
 
 #### gulpfile.js
@@ -97,8 +51,6 @@ define("rocks/header", ["exports"], function(__exports__) {
 gulp.task('templates', function(){
   gulp.src('source/templates/*.hbs')
     .pipe(htmlbars({
-      isHTMLBars:       true,
-      // see #API section for more details
       templateCompiler: require('../bower_components/ember/ember-template-compiler')
     }))
     .pipe(wrap({
@@ -123,7 +75,9 @@ You can use [`gulp-replace`](https://www.npmjs.com/package/gulp-replace) to modf
 ```js
 gulp.task('templates', function(){
   gulp.src('source/templates/*.hbs')
-    .pipe(htmlbars())
+      .pipe(htmlbars({
+        templateCompiler: require('../bower_components/ember/ember-template-compiler')
+      }))
     .pipe(wrap({
       deps:         ['exports'],          // dependency array
       params:       ['__exports__'],        // params for callback
@@ -153,33 +107,11 @@ npm test  # kick start your local tests
 
 ### htmlbars(options)
 
-`options` is an optional object. By default, calling `htmlbars()` without any argument, and it will compile the given templates with **Handlebars** compiler.
-
-#### options.isHTMLBars
-Type: `Boolean`
-Default: false
-
-By default, `isHTMLBars` is false. It will wrap the compiled template inside *Handlebars*, ex: "Ember.Handlebars.template(...)".
-If true, It will wrap the compiled template inside *HTMLBars*, ex: "Ember.HTMLBars.template(...)".
-
-Note: When `isHTMLBars` is true, you need to define the template compiler function via `options.templateCompiler`
-
-```js
-var options = {
-  isHTMLBars:       true,
-  templateCompiler:  require('../bower_components/ember/ember-template-compiler')
-};
-gulp.src(glob)
-  .pipe(task(options))
-  .pipe(gulp.dest('build/js/'));
-```
-
-#### options.templateCompiler
+#### options.templateCompiler [required]
 Type: `Function`
 Default: null
 
-By default, `templateCompiler` is null. It is used in conjunction with `isHTMLBars: true}`. Each `Ember` core version (beta or stable)
-will bundle the `ember-template-compiler.js` script to compile HTMLBars template. It is because the HTMLBars project is in the heavy development cycle.
+The file path of `ember-template-compiler` script which bundled with each version of Ember.js. Each `Ember` core version (beta or stable) will bundle the `ember-template-compiler.js` script to compile HTMLBars template.
 
 Ex: `templateCompiler: require('../bower_components/ember/ember-template-compiler')`
 

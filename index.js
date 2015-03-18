@@ -2,25 +2,18 @@
 
 var through = require('through2');
 var PluginError = require('gulp-util').PluginError;
-var HtmlbarsCompiler = require('ember-cli-htmlbars');
 var objectAssign = require('object-assign');
 
 var defaultOptions = {
-  isHTMLBars:       false,
   templateCompiler: null
-
-  // `templateCompiler` that is paired with your Ember version
-  // only available when used conjunction with `isHTMLBars: true,`
-  // isHTMLBars: true,
   // Whatever comes with your Ember package template compiler
   // templateCompiler: require('../bower_components/ember/ember-template-compiler')
 };
 
 function compile (contents, opts) {
   var contentsToString = String(contents);
-  var htmlBarsCompiler = new HtmlbarsCompiler(null, opts);
-  var operation = htmlBarsCompiler.processString(contentsToString);
-  return new Buffer(operation);
+  var content = "export default Ember.HTMLBars.template(" + opts.templateCompiler.precompile(contentsToString, false) + ');';
+  return new Buffer(content);
 }
 
 module.exports = function (options) {
@@ -39,6 +32,11 @@ module.exports = function (options) {
     }
 
     var opts = objectAssign(defaultOptions, options);
+
+    if (!opts.templateCompiler) {
+      cb(new PluginError('gulp-htmlbars', 'Missing value of templateCompiler from options'));
+      return;
+    }
 
     // `file.contents` type should always be the same going out as it was when it came in
     try {

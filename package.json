@@ -1,6 +1,6 @@
 {
   "name": "gulp-htmlbars",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "To compile htmlbars templates for Ember App or handlebars templates",
   "keywords": [
     "gulpplugin",
@@ -12,7 +12,6 @@
   "repository": "https://github.com/mattma/gulp-htmlbars.git",
   "author": "Matt Ma <matt@mattmadesign.com>",
   "dependencies": {
-    "ember-cli-htmlbars": "^0.6.0",
     "gulp-util": "^3.0.2",
     "object-assign": "^2.0.0",
     "through2": "^0.6.3"
